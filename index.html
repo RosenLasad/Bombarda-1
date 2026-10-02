@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#07131e">
+  <title>Bombarda! - Prototipo 1.2</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <section id="menuScreen" class="screen active">
+    <div class="menu-card">
+      <div class="eyebrow">PROTOTIPO 1.2 · 6 LIVELLI PILOTA</div>
+      <h1>Bombarda!</h1>
+      <p class="subtitle">Difendi la postazione genovese dalle flotte nemiche.</p>
+
+      <div class="level-picker-wrap">
+        <label for="levelSelect">Livello pilota</label>
+        <select id="levelSelect" class="level-select"></select>
+        <div id="levelMeta" class="level-meta"></div>
+      </div>
+
+      <div class="menu-actions">
+        <button id="newGameBtn" class="btn primary">Avvia livello</button>
+        <button id="continueBtn" class="btn" disabled>Continua partita</button>
+        <button id="settingsBtn" class="btn">Impostazioni</button>
+      </div>
+
+      <div class="stats-box">
+        <div><span>Partite</span><strong id="statGames">0</strong></div>
+        <div><span>Vittorie</span><strong id="statWins">0</strong></div>
+        <div><span>Miglior punteggio</span><strong id="statBest">0</strong></div>
+      </div>
+
+      <div class="howto">
+        <b>PC:</b> muovi il mouse o usa A/D / ← → per ruotare il cannone, clic sinistro o Spazio per sparare.<br>
+        <b>Smartphone:</b> joystick per ruotare, pulsante <b>E</b> per sparare.
+      </div>
+    </div>
+  </section>
+
+  <section id="gameScreen" class="screen">
+    <div id="gameShell">
+      <canvas id="gameCanvas" width="720" height="1280" aria-label="Campo di gioco Bombarda!"></canvas>
+
+      <div id="hud">
+        <div class="hud-cluster">
+          <button id="pauseBtn" class="icon-btn" aria-label="Pausa">Ⅱ</button>
+          <div class="hud-pill">L<span id="levelText">1</span></div>
+          <div class="hud-pill">⏱ <span id="timeText">30.0</span></div>
+        </div>
+        <div class="hud-cluster right">
+          <div id="hpPill" class="hud-pill hp-pill" aria-label="Resistenza postazione">
+            <span class="hp-icon">❤</span>
+            <div class="hp-meter"><div id="hpFill"></div></div>
+            <span id="hpText">100</span>
+          </div>
+          <div class="hud-pill">★ <span id="scoreText">0</span></div>
+        </div>
+      </div>
+
+      <div id="levelBanner" class="level-banner hidden">
+        <strong id="levelBannerTitle"></strong>
+        <span id="levelBannerSubtitle"></span>
+      </div>
+
+      <div id="reloadWrap" class="ready">
+        <div class="reload-label">CARICO</div>
+        <div class="reload-track"><div id="reloadFill"></div></div>
+      </div>
+
+      <div id="mobileControls">
+        <div id="joystick" class="joystick" aria-label="Joystick mira">
+          <div class="joy-ring"></div>
+          <div id="joyKnob" class="joy-knob"></div>
+        </div>
+        <button id="fireBtn" class="fire-btn" aria-label="Spara">E</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="settingsOverlay" class="overlay hidden">
+    <div class="dialog">
+      <h2>Impostazioni</h2>
+      <label class="setting-row"><span><b>Linea di mira</b><small>Linea tratteggiata animata davanti al cannone.</small></span><input id="aimLineToggle" type="checkbox" checked></label>
+      <label class="setting-row"><span><b>Vibrazione</b><small>Feedback tattile leggero sui dispositivi compatibili.</small></span><input id="vibrationToggle" type="checkbox" checked></label>
+      <label class="setting-row"><span><b>Musica</b><small>Predisposta per le future tracce dei livelli.</small></span><input id="musicToggle" type="checkbox" checked></label>
+      <div class="dialog-actions"><button id="closeSettingsBtn" class="btn primary">Chiudi</button></div>
+    </div>
+  </div>
+
+  <div id="pauseOverlay" class="overlay hidden">
+    <div class="dialog compact">
+      <h2>Pausa</h2>
+      <div class="dialog-actions vertical">
+        <button id="resumeBtn" class="btn primary">Riprendi</button>
+        <button id="restartBtn" class="btn">Ricomincia</button>
+        <button id="quitBtn" class="btn danger">Salva e torna al menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="endOverlay" class="overlay hidden">
+    <div class="dialog compact">
+      <div id="endKicker" class="eyebrow">FINE PARTITA</div>
+      <h2 id="endTitle">Vittoria!</h2>
+      <p id="endMessage"></p>
+      <div class="result-grid">
+        <div><span>Punteggio</span><strong id="endScore">0</strong></div>
+        <div><span>Navi distrutte</span><strong id="endKills">0</strong></div>
+      </div>
+      <div class="dialog-actions vertical">
+        <button id="playAgainBtn" class="btn primary">Rigioca livello</button>
+        <button id="endMenuBtn" class="btn">Menu</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="js/data/levels.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

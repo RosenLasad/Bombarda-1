@@ -1,0 +1,143 @@
+(() => {
+  'use strict';
+
+  // Sei livelli pilota. I nomi/scenari sono volutamente provvisori:
+  // servono a testare ritmo, difficolta', temi grafici e futuro audio.
+  window.BOMBARDA_LEVELS = [
+    {
+      id: 1,
+      title: 'Le mura sul mare',
+      location: 'Genova - scenario pilota',
+      faction: 'Pisa',
+      difficulty: 'Facile',
+      duration: 24,
+      smallSpeed: 29,
+      spawnSmallEvery: 3.6,
+      spawnLargeEvery: 12.5,
+      maxSmalls: 5,
+      maxLarges: 1,
+      largeHP: 4,
+      largeFireMin: 5.2,
+      largeFireMax: 6.4,
+      flagship: null,
+      theme: 'stone-light',
+      music: { path: 'audio/music/levels/level_01.mp3', ready: false }
+    },
+    {
+      id: 2,
+      title: 'Batteria del porto',
+      location: 'Genova - scenario pilota',
+      faction: 'Venezia',
+      difficulty: 'Normale',
+      duration: 28,
+      smallSpeed: 32,
+      spawnSmallEvery: 3.15,
+      spawnLargeEvery: 10.8,
+      maxSmalls: 6,
+      maxLarges: 2,
+      largeHP: 4,
+      largeFireMin: 4.8,
+      largeFireMax: 6.0,
+      flagship: null,
+      theme: 'stone-warm',
+      music: { path: 'audio/music/levels/level_02.mp3', ready: false }
+    },
+    {
+      id: 3,
+      title: 'La nave ammiraglia',
+      location: 'Genova - scenario pilota',
+      faction: 'Flotta rivale',
+      difficulty: 'Difficile',
+      duration: 32,
+      smallSpeed: 34,
+      spawnSmallEvery: 2.9,
+      spawnLargeEvery: 10.0,
+      maxSmalls: 7,
+      maxLarges: 2,
+      largeHP: 4,
+      largeFireMin: 4.4,
+      largeFireMax: 5.7,
+      flagship: {
+        hp: 7,
+        spawnAt: 7.5,
+        fireMin: 4.2,
+        fireMax: 5.2,
+        warning: 1.35,
+        score: 900
+      },
+      theme: 'stone-dark',
+      music: { path: 'audio/music/levels/level_03.mp3', ready: false }
+    },
+    {
+      id: 4,
+      title: 'Assalto alla darsena',
+      location: 'Genova - scenario pilota',
+      faction: 'Francia',
+      difficulty: 'Medio-Difficile',
+      duration: 34,
+      smallSpeed: 36,
+      spawnSmallEvery: 2.6,
+      spawnLargeEvery: 9.2,
+      maxSmalls: 7,
+      maxLarges: 2,
+      largeHP: 4,
+      largeFireMin: 4.1,
+      largeFireMax: 5.3,
+      flagship: null,
+      theme: 'stone-grey',
+      music: { path: 'audio/music/levels/level_04.mp3', ready: false }
+    },
+    {
+      id: 5,
+      title: 'Forte genovese',
+      location: 'Colonia genovese - scenario pilota',
+      faction: 'Ottomani',
+      difficulty: 'Difficile',
+      duration: 36,
+      smallSpeed: 38,
+      spawnSmallEvery: 2.35,
+      spawnLargeEvery: 8.7,
+      maxSmalls: 8,
+      maxLarges: 2,
+      largeHP: 4,
+      largeFireMin: 3.9,
+      largeFireMax: 5.0,
+      flagship: {
+        hp: 7,
+        spawnAt: 10.0,
+        fireMin: 4.0,
+        fireMax: 5.0,
+        warning: 1.25,
+        score: 950
+      },
+      theme: 'stone-sand',
+      music: { path: 'audio/music/levels/level_05.mp3', ready: false }
+    },
+    {
+      id: 6,
+      title: 'Grande assedio',
+      location: 'Scenario finale pilota',
+      faction: 'Flotta coalizzata',
+      difficulty: 'Molto difficile',
+      duration: 40,
+      smallSpeed: 40,
+      spawnSmallEvery: 2.15,
+      spawnLargeEvery: 8.0,
+      maxSmalls: 9,
+      maxLarges: 3,
+      largeHP: 4,
+      largeFireMin: 3.7,
+      largeFireMax: 4.8,
+      flagship: {
+        hp: 8,
+        spawnAt: 8.5,
+        fireMin: 3.8,
+        fireMax: 4.8,
+        warning: 1.2,
+        score: 1100
+      },
+      theme: 'stone-night',
+      music: { path: 'audio/music/levels/level_06.mp3', ready: false }
+    }
+  ];
+})();
