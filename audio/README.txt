@@ -1,17 +1,23 @@
-BOMBARDA! - STRUTTURA AUDIO
+BOMBARDA! - AUDIO
 
-music/
-  menu/
-    menu_theme.mp3
-  levels/
-    level_01.mp3 ... level_06.mp3
+MUSICA
+  audio/music/menu/menu_theme.mp3
+  audio/music/levels/level_01.mp3
+  audio/music/levels/level_02.mp3
+  ...
 
-sfx/
-  cannon/    sparo, rinculo, ricarica
-  impacts/   impatto acqua, legno, pietra
-  ships/     bombardamento, nave distrutta, nave ammiraglia
-  ui/        click, conferma, vittoria, sconfitta
+Le tracce dei livelli devono anche avere ready: true nel relativo blocco di js/data/levels.js.
+I livelli 1 e 2 sono gia' abilitati.
 
-Le musiche non sono incluse in questo prototipo.
-In js/data/levels.js ogni traccia ha ready:false: quando il relativo MP3 sara' presente,
-impostare ready:true per abilitarne la riproduzione automatica in loop.
+SFX - NOMI PREVISTI DAL CODICE
+  audio/sfx/cannon/cannon_fire.mp3
+  audio/sfx/impacts/impact_small.mp3
+  audio/sfx/impacts/impact_large.mp3
+  audio/sfx/ships/small_explosion.mp3
+  audio/sfx/ships/large_explosion.mp3
+  audio/sfx/ui/click.mp3
+  audio/sfx/ui/pause.mp3
+
+Gli SFX sono opzionali: se un file manca, il gioco continua a funzionare normalmente.
+
+Nota browser/mobile: la riproduzione audio automatica puo' essere bloccata finche' l'utente non interagisce con la pagina. Bombarda! prova ad avviare la musica del menu e la riattiva automaticamente al primo click/tocco/tasto utile.
