@@ -87,6 +87,14 @@
       <label class="setting-row"><span><b>Vibrazione</b><small>Feedback tattile leggero sui dispositivi compatibili.</small></span><input id="vibrationToggle" type="checkbox" checked></label>
       <label class="setting-row"><span><b>Musica</b><small>Musica del menu e dei livelli.</small></span><input id="musicToggle" type="checkbox" checked></label>
       <label class="setting-row"><span><b>SFX</b><small>Colpi di cannone, impatti, esplosioni e suoni dell'interfaccia.</small></span><input id="sfxToggle" type="checkbox" checked></label>
+      <div class="setting-row sensitivity-row">
+        <span><b>Sensibilità cannone</b><small>1 = più frenata · 5 = più veloce.</small></span>
+        <div class="sensitivity-control">
+          <input id="cannonSensitivity" type="range" min="1" max="5" step="1" value="3" aria-label="Sensibilità cannone">
+          <div class="sensitivity-scale" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+          <strong id="cannonSensitivityValue">3</strong>
+        </div>
+      </div>
       <div class="dialog-actions"><button id="closeSettingsBtn" class="btn primary">Chiudi</button></div>
     </div>
   </div>

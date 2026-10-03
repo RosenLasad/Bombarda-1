@@ -64,6 +64,8 @@ h1{font-family:Georgia,serif;font-size:58px;line-height:.95;margin:0;color:#fff0
 .overlay{position:absolute;z-index:20;inset:0;background:rgba(0,0,0,.58);display:flex;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(6px)}
 .dialog h2{font-family:Georgia,serif;font-size:34px;margin:0 0 16px}.dialog.compact{width:min(420px,92vw)}
 .setting-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 0;border-bottom:1px solid var(--line)}.setting-row small{display:block;color:var(--muted);margin-top:4px;line-height:1.35}.setting-row input{width:22px;height:22px;accent-color:#c58f3f}
+
+.sensitivity-row{align-items:flex-start}.sensitivity-control{width:190px;max-width:46%;display:grid;grid-template-columns:1fr 28px;column-gap:10px;align-items:center}.sensitivity-control input[type="range"]{grid-column:1;width:100%;height:24px;margin:0;accent-color:#c58f3f}.sensitivity-control strong{grid-column:2;grid-row:1/3;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:9px;background:rgba(217,163,66,.16);border:1px solid rgba(243,207,121,.35);color:#ffe4a0}.sensitivity-scale{grid-column:1;display:flex;justify-content:space-between;padding:0 2px;color:var(--muted);font-size:10px;line-height:1}.sensitivity-scale span{width:10px;text-align:center}
 .dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.dialog-actions.vertical{display:grid}.result-grid{grid-template-columns:repeat(3,1fr);margin:16px 0}
 #endMessage{color:var(--muted);line-height:1.45}
 @media (pointer:coarse),(max-width:900px){#mobileControls{display:flex}}
@@ -81,3 +83,5 @@ h1{font-family:Georgia,serif;font-size:58px;line-height:.95;margin:0;color:#fff0
 .flagship-hint{color:#ffd087;font-weight:800}
 
 @media (max-width:420px){#endOverlay .result-grid{grid-template-columns:1fr 1fr}#endOverlay .result-grid>div:last-child{grid-column:1/-1}}
+
+@media (max-width:430px){.sensitivity-row{gap:10px}.sensitivity-control{width:155px;max-width:48%}}

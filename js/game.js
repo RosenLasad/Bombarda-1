@@ -30,6 +30,7 @@
   const newGameBtn=$('#newGameBtn'), continueBtn=$('#continueBtn'), settingsBtn=$('#settingsBtn');
   const levelSelect=$('#levelSelect'), levelMeta=$('#levelMeta');
   const settingsOverlay=$('#settingsOverlay'), closeSettingsBtn=$('#closeSettingsBtn');
+  const cannonSensitivity=$('#cannonSensitivity'), cannonSensitivityValue=$('#cannonSensitivityValue');
   const aimLineToggle=$('#aimLineToggle'), vibrationToggle=$('#vibrationToggle'), musicToggle=$('#musicToggle'), sfxToggle=$('#sfxToggle');
   const pauseOverlay=$('#pauseOverlay'), pauseBtn=$('#pauseBtn'), resumeBtn=$('#resumeBtn'), restartBtn=$('#restartBtn'), quitBtn=$('#quitBtn');
   const pauseMusicToggle=$('#pauseMusicToggle'), pauseSfxToggle=$('#pauseSfxToggle');
@@ -42,8 +43,9 @@
   const levelBanner=$('#levelBanner'), levelBannerTitle=$('#levelBannerTitle'), levelBannerSubtitle=$('#levelBannerSubtitle');
   const canvas=$('#gameCanvas'), ctx=canvas.getContext('2d');
 
-  let settings=loadJSON(STORAGE.settings,{aimLine:true,vibration:true,music:true,sfx:true});
+  let settings=loadJSON(STORAGE.settings,{aimLine:true,vibration:true,music:true,sfx:true,cannonSensitivity:3});
   if(typeof settings.sfx!=='boolean')settings.sfx=true;
+  settings.cannonSensitivity=clamp(Math.round(Number(settings.cannonSensitivity)||3),1,5);
   let stats=loadJSON(STORAGE.stats,{games:0,wins:0,best:0});
   let progress=loadJSON(STORAGE.progress,{});
   let state=null, raf=0, lastTs=performance.now(), saveAccumulator=0, bannerTimer=0;
@@ -58,6 +60,8 @@
   if(sfxToggle)sfxToggle.checked=settings.sfx;
   if(pauseMusicToggle)pauseMusicToggle.checked=settings.music;
   if(pauseSfxToggle)pauseSfxToggle.checked=settings.sfx;
+  if(cannonSensitivity)cannonSensitivity.value=String(settings.cannonSensitivity);
+  if(cannonSensitivityValue)cannonSensitivityValue.textContent=String(settings.cannonSensitivity);
 
   function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
   function lerp(a,b,t){return a+(b-a)*t;}
@@ -67,6 +71,9 @@
   function vibrate(ms=18){if(settings.vibration&&navigator.vibrate)navigator.vibrate(ms);}
   function getLevel(id){return LEVELS.find(l=>l.id===Number(id))||LEVELS[0];}
   function selectedLevel(){return getLevel(levelSelect.value||1);}
+  function sensitivityLevel(){return clamp(Math.round(Number(settings.cannonSensitivity)||3),1,5);}
+  function keyboardTurnSpeed(){return [0,26,42,58,78,100][sensitivityLevel()];}
+  function joystickTurnSpeed(){return [0,45,75,120,200,360][sensitivityLevel()];}
 
   function populateLevels(){
     levelSelect.innerHTML='';
@@ -95,7 +102,7 @@
       running:true,paused:false,ended:false,
       elapsed:0,
       hp:CFG.playerHP,score:0,kills:0,
-      cannonDeg:0,bullets:[],ships:[],fx:[],enemyShots:[],
+      cannonDeg:0,joyTargetDeg:0,bullets:[],ships:[],fx:[],enemyShots:[],
       canFire:true,reloadUntil:0,
       nextSmall:0.5,nextLarge:4.5,nextShipId:1,
       spawnedSmall:0,spawnedLarge:0,flagshipSpawned:false,
@@ -142,7 +149,7 @@
       st.elapsed=Math.max(0,Number(s.elapsed)||0);
       st.hp=clamp(Number.isFinite(Number(s.hp))?Number(s.hp):CFG.playerHP,0,CFG.playerHP);
       st.score=Math.max(0,Number(s.score)||0); st.kills=Math.max(0,Number(s.kills)||0);
-      st.cannonDeg=clamp(Number(s.cannonDeg)||0,CFG.cannonMinDeg,CFG.cannonMaxDeg);
+      st.cannonDeg=clamp(Number(s.cannonDeg)||0,CFG.cannonMinDeg,CFG.cannonMaxDeg); st.joyTargetDeg=st.cannonDeg;
       st.canFire=!!s.canFire; st.reloadUntil=performance.now()+Math.max(0,Number(s.reloadRemaining)||0);
       st.nextSmall=Number(s.nextSmall)||1; st.nextLarge=Number(s.nextLarge)||6; st.nextShipId=Number(s.nextShipId)||1;
       st.spawnedSmall=Math.max(0,Number(s.spawnedSmall)||0); st.spawnedLarge=Math.max(0,Number(s.spawnedLarge)||0);
@@ -198,7 +205,14 @@
     state.elapsed+=dt;
 
     const dir=(keys.has('ArrowRight')||keys.has('KeyD')?1:0)-(keys.has('ArrowLeft')||keys.has('KeyA')?1:0);
-    if(dir)state.cannonDeg=clamp(state.cannonDeg+dir*58*dt,CFG.cannonMinDeg,CFG.cannonMaxDeg);
+    if(dir)state.cannonDeg=clamp(state.cannonDeg+dir*keyboardTurnSpeed()*dt,CFG.cannonMinDeg,CFG.cannonMaxDeg);
+    if(joyPointer!==null){
+      const target=clamp(Number(state.joyTargetDeg)||0,CFG.cannonMinDeg,CFG.cannonMaxDeg);
+      const delta=target-state.cannonDeg;
+      const step=joystickTurnSpeed()*dt;
+      if(Math.abs(delta)<=step)state.cannonDeg=target;
+      else state.cannonDeg+=Math.sign(delta)*step;
+    }
 
     state.nextSmall-=dt;state.nextLarge-=dt;
     const smallCount=state.ships.filter(s=>s.type==='small').length;
@@ -604,16 +618,16 @@
 
   function loop(ts){const dt=Math.min(.04,(ts-lastTs)/1000);lastTs=ts;update(dt,ts);draw();raf=requestAnimationFrame(loop);}
 
-  canvas.addEventListener('mousemove',e=>{if(!state||state.paused)return;const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,nx=clamp((x-W/2)/(W*.43),-1,1);state.cannonDeg=nx*CFG.cannonMaxDeg;});
+  canvas.addEventListener('mousemove',e=>{if(!state||state.paused)return;const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,nx=clamp((x-W/2)/(W*.43),-1,1);state.cannonDeg=nx*CFG.cannonMaxDeg;state.joyTargetDeg=state.cannonDeg;});
   canvas.addEventListener('mousedown',e=>{if(e.button===0){e.preventDefault();fire();}});
   window.addEventListener('keydown',e=>{keys.add(e.code);if(['Space','Enter'].includes(e.code)){e.preventDefault();fire();}if(e.code==='Escape'&&state&&!state.ended){state.paused?resumeGame():pauseGame();}});
   window.addEventListener('keyup',e=>keys.delete(e.code));
 
   let joyPointer=null;
-  function updateJoy(clientX,clientY){if(!state)return;const r=joystick.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=clientX-cx,dy=clientY-cy;const max=34,len=Math.hypot(dx,dy)||1;if(len>max){dx=dx/len*max;dy=dy/len*max;}joyKnob.style.transform=`translate(${dx}px,${dy}px)`;state.cannonDeg=clamp(dx/max,-1,1)*CFG.cannonMaxDeg;}
+  function updateJoy(clientX,clientY){if(!state)return;const r=joystick.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=clientX-cx,dy=clientY-cy;const max=34,len=Math.hypot(dx,dy)||1;if(len>max){dx=dx/len*max;dy=dy/len*max;}joyKnob.style.transform=`translate(${dx}px,${dy}px)`;state.joyTargetDeg=clamp(dx/max,-1,1)*CFG.cannonMaxDeg;}
   joystick.addEventListener('pointerdown',e=>{joyPointer=e.pointerId;joystick.setPointerCapture(e.pointerId);updateJoy(e.clientX,e.clientY);});
   joystick.addEventListener('pointermove',e=>{if(e.pointerId===joyPointer)updateJoy(e.clientX,e.clientY);});
-  function releaseJoy(e){if(e.pointerId!==joyPointer)return;joyPointer=null;joyKnob.style.transform='translate(0,0)';}
+  function releaseJoy(e){if(e.pointerId!==joyPointer)return;joyPointer=null;if(state)state.joyTargetDeg=state.cannonDeg;joyKnob.style.transform='translate(0,0)';}
   joystick.addEventListener('pointerup',releaseJoy);joystick.addEventListener('pointercancel',releaseJoy);fireBtn.addEventListener('pointerdown',e=>{e.preventDefault();fire();});
 
   function replaceHistory(tag){try{history.replaceState({bombarda:tag},'');}catch(_){}}
@@ -651,6 +665,7 @@
   settingsBtn.addEventListener('click',()=>{if(audio)audio.playSfx('uiClick',.65);settingsOverlay.classList.remove('hidden');pushHistory('settings');});closeSettingsBtn.addEventListener('click',()=>{if(history.state&&history.state.bombarda==='settings')history.back();else settingsOverlay.classList.add('hidden');});
   aimLineToggle.addEventListener('change',()=>{settings.aimLine=aimLineToggle.checked;saveJSON(STORAGE.settings,settings);});
   vibrationToggle.addEventListener('change',()=>{settings.vibration=vibrationToggle.checked;saveJSON(STORAGE.settings,settings);});
+  if(cannonSensitivity)cannonSensitivity.addEventListener('input',()=>{settings.cannonSensitivity=clamp(Math.round(Number(cannonSensitivity.value)||3),1,5);if(cannonSensitivityValue)cannonSensitivityValue.textContent=String(settings.cannonSensitivity);saveJSON(STORAGE.settings,settings);});
   musicToggle.addEventListener('change',()=>applyMusicSetting(musicToggle.checked));
   if(sfxToggle)sfxToggle.addEventListener('change',()=>applySfxSetting(sfxToggle.checked));
   if(pauseMusicToggle)pauseMusicToggle.addEventListener('change',()=>applyMusicSetting(pauseMusicToggle.checked));
