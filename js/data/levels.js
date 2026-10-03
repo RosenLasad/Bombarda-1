@@ -1,8 +1,8 @@
 (() => {
   'use strict';
 
-  // Sei livelli pilota. I nomi/scenari sono volutamente provvisori:
-  // servono a testare ritmo, difficolta', temi grafici e futuro audio.
+  // Sei livelli pilota. Il tempo ora e' crescente: ogni livello termina
+  // quando sono state generate e distrutte tutte le navi previste.
   window.BOMBARDA_LEVELS = [
     {
       id: 1,
@@ -11,7 +11,8 @@
       faction: 'Pisa',
       assetFaction: 'pisa',
       difficulty: 'Facile',
-      duration: 24,
+      smallTotal: 6,
+      largeTotal: 1,
       smallSpeed: 29,
       spawnSmallEvery: 3.6,
       spawnLargeEvery: 12.5,
@@ -22,7 +23,7 @@
       largeFireMax: 6.4,
       flagship: null,
       theme: 'stone-light',
-      music: { path: 'audio/music/levels/level_01.mp3', ready: false }
+      music: { path: 'audio/music/levels/level_01.mp3', ready: true }
     },
     {
       id: 2,
@@ -31,7 +32,8 @@
       faction: 'Venezia',
       assetFaction: 'venice',
       difficulty: 'Normale',
-      duration: 28,
+      smallTotal: 7,
+      largeTotal: 2,
       smallSpeed: 32,
       spawnSmallEvery: 3.15,
       spawnLargeEvery: 10.8,
@@ -42,7 +44,7 @@
       largeFireMax: 6.0,
       flagship: null,
       theme: 'stone-warm',
-      music: { path: 'audio/music/levels/level_02.mp3', ready: false }
+      music: { path: 'audio/music/levels/level_02.mp3', ready: true }
     },
     {
       id: 3,
@@ -51,7 +53,8 @@
       faction: 'Flotta rivale',
       assetFaction: 'rival',
       difficulty: 'Difficile',
-      duration: 32,
+      smallTotal: 8,
+      largeTotal: 2,
       smallSpeed: 34,
       spawnSmallEvery: 2.9,
       spawnLargeEvery: 10.0,
@@ -78,7 +81,8 @@
       faction: 'Francia',
       assetFaction: 'france',
       difficulty: 'Medio-Difficile',
-      duration: 34,
+      smallTotal: 9,
+      largeTotal: 3,
       smallSpeed: 36,
       spawnSmallEvery: 2.6,
       spawnLargeEvery: 9.2,
@@ -98,7 +102,8 @@
       faction: 'Ottomani',
       assetFaction: 'ottoman',
       difficulty: 'Difficile',
-      duration: 36,
+      smallTotal: 10,
+      largeTotal: 3,
       smallSpeed: 38,
       spawnSmallEvery: 2.35,
       spawnLargeEvery: 8.7,
@@ -125,7 +130,8 @@
       faction: 'Flotta coalizzata',
       assetFaction: 'coalition',
       difficulty: 'Molto difficile',
-      duration: 40,
+      smallTotal: 11,
+      largeTotal: 4,
       smallSpeed: 40,
       spawnSmallEvery: 2.15,
       spawnLargeEvery: 8.0,

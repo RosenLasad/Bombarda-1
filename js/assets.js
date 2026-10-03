@@ -5,11 +5,13 @@
   // provvisoria finche' i PNG definitivi non vengono inseriti nelle cartelle.
   const SMALL_ROOT = 'images/ships/small/';
   const LARGE_ROOT = 'images/ships/large/';
+  const UI_ROOT = 'images/ui/';
 
   function buildShipManifest(root, explosionDir){
     return {
       base: {
         hull: root + 'base/hull.png',
+        hullHit: root + 'base/hull_hit.png',
         mast: root + 'base/mast.png',
         sailMain: root + 'base/sail_main.png',
         sailBack: root + 'base/sail_back.png',
@@ -34,7 +36,10 @@
 
   const manifest = {
     small: buildShipManifest(SMALL_ROOT, 'images/sprites/effects/explosions/small_ship'),
-    large: buildShipManifest(LARGE_ROOT, 'images/sprites/effects/explosions/large_ship')
+    large: buildShipManifest(LARGE_ROOT, 'images/sprites/effects/explosions/large_ship'),
+    ui: {
+      playerCannon: UI_ROOT + 'player_cannon.png'
+    }
   };
 
   const images = new Map();
@@ -64,6 +69,7 @@
   function preload(){
     preloadShip('small');
     preloadShip('large');
+    request(manifest.ui.playerCannon);
   }
 
   function get(path){
@@ -101,6 +107,7 @@
   function largeHitFlash(){ return hitFlashFor('large'); }
   function hasLargeBase(){ return hasBase('large'); }
   function hasFullLargeExplosion(){ return hasFullExplosion('large'); }
+  function playerCannon(){ return get(manifest.ui.playerCannon); }
 
   window.BombardaAssets = {
     manifest, preload,
@@ -109,6 +116,7 @@
     baseFor, flagFor, impactFramesFor, explosionFramesFor, hitFlashFor,
     largeBase, largeFlag, largeImpactFrames, largeExplosionFrames, largeHitFlash,
     hasLargeBase, hasFullLargeExplosion,
+    playerCannon,
     status: path => status.get(path) || 'not-requested'
   };
 

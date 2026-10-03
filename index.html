@@ -48,7 +48,7 @@
         <div class="hud-cluster">
           <button id="pauseBtn" class="icon-btn" aria-label="Pausa">Ⅱ</button>
           <div class="hud-pill">L<span id="levelText">1</span></div>
-          <div class="hud-pill">⏱ <span id="timeText">30.0</span></div>
+          <div class="hud-pill">⏱ <span id="timeText">0.0</span></div>
         </div>
         <div class="hud-cluster right">
           <div id="hpPill" class="hud-pill hp-pill" aria-label="Resistenza postazione">
@@ -71,11 +71,11 @@
       </div>
 
       <div id="mobileControls">
+        <button id="fireBtn" class="fire-btn" aria-label="Spara">E</button>
         <div id="joystick" class="joystick" aria-label="Joystick mira">
           <div class="joy-ring"></div>
           <div id="joyKnob" class="joy-knob"></div>
         </div>
-        <button id="fireBtn" class="fire-btn" aria-label="Spara">E</button>
       </div>
     </div>
   </section>
@@ -85,7 +85,8 @@
       <h2>Impostazioni</h2>
       <label class="setting-row"><span><b>Linea di mira</b><small>Linea tratteggiata animata davanti al cannone.</small></span><input id="aimLineToggle" type="checkbox" checked></label>
       <label class="setting-row"><span><b>Vibrazione</b><small>Feedback tattile leggero sui dispositivi compatibili.</small></span><input id="vibrationToggle" type="checkbox" checked></label>
-      <label class="setting-row"><span><b>Musica</b><small>Predisposta per le future tracce dei livelli.</small></span><input id="musicToggle" type="checkbox" checked></label>
+      <label class="setting-row"><span><b>Musica</b><small>Musica del menu e dei livelli.</small></span><input id="musicToggle" type="checkbox" checked></label>
+      <label class="setting-row"><span><b>SFX</b><small>Colpi di cannone, impatti, esplosioni e suoni dell'interfaccia.</small></span><input id="sfxToggle" type="checkbox" checked></label>
       <div class="dialog-actions"><button id="closeSettingsBtn" class="btn primary">Chiudi</button></div>
     </div>
   </div>
@@ -93,6 +94,8 @@
   <div id="pauseOverlay" class="overlay hidden">
     <div class="dialog compact">
       <h2>Pausa</h2>
+      <label class="setting-row"><span><b>Musica</b><small>Attiva o disattiva la musica.</small></span><input id="pauseMusicToggle" type="checkbox" checked></label>
+      <label class="setting-row"><span><b>SFX</b><small>Attiva o disattiva gli effetti sonori.</small></span><input id="pauseSfxToggle" type="checkbox" checked></label>
       <div class="dialog-actions vertical">
         <button id="resumeBtn" class="btn primary">Riprendi</button>
         <button id="restartBtn" class="btn">Ricomincia</button>
@@ -109,9 +112,11 @@
       <div class="result-grid">
         <div><span>Punteggio</span><strong id="endScore">0</strong></div>
         <div><span>Navi distrutte</span><strong id="endKills">0</strong></div>
+        <div><span>Tempo</span><strong id="endTime">0.0 s</strong></div>
       </div>
       <div class="dialog-actions vertical">
-        <button id="playAgainBtn" class="btn primary">Rigioca livello</button>
+        <button id="nextLevelBtn" class="btn primary hidden">Livello n° 2</button>
+        <button id="playAgainBtn" class="btn">Rigioca livello</button>
         <button id="endMenuBtn" class="btn">Menu</button>
       </div>
     </div>
