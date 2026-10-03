@@ -30,3 +30,11 @@ ui/
 Naming consigliato per frame sprite:
   reload_000.png, reload_001.png, reload_002.png ...
 Tenere i frame della stessa animazione con identiche dimensioni canvas e pivot coerente.
+
+
+Preparazione Fase 1 - nave grande:
+- images/ships/large/base/        asset modulari nave grande
+- images/ships/large/flags/       simboli/fazioni sulla vela principale
+- images/sprites/effects/explosions/large_ship/   8 frame dell'esplosione della nave grande
+
+Il codice e' gia' predisposto: se i file esistono, il gioco li usa automaticamente; altrimenti resta attivo il fallback vettoriale.
