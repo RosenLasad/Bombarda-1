@@ -26,7 +26,7 @@
       effects: {
         hitFlash: ROOT + 'effects/hit_flash.png',
         impact: [0,1,2].map(i => ROOT + `effects/impact_puff_${String(i).padStart(2,'0')}.png`),
-        explosion: Array.from({length:8},(_,i) => ROOT + `explode/explode_${String(i).padStart(2,'0')}.png`)
+        explosion: Array.from({length:8},(_,i) => `images/sprites/effects/explosions/small_ship/explosion_${String(i+1).padStart(2,'0')}.png`)
       }
     }
   };
