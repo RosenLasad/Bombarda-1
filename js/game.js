@@ -28,6 +28,7 @@
   const $ = s => document.querySelector(s);
   const menuScreen=$('#menuScreen'), gameScreen=$('#gameScreen');
   const newGameBtn=$('#newGameBtn'), continueBtn=$('#continueBtn'), settingsBtn=$('#settingsBtn');
+  const menuFullscreenBtn=$('#menuFullscreenBtn'), gameFullscreenBtn=$('#gameFullscreenBtn');
   const levelSelect=$('#levelSelect'), levelMeta=$('#levelMeta');
   const settingsOverlay=$('#settingsOverlay'), closeSettingsBtn=$('#closeSettingsBtn');
   const cannonSensitivity=$('#cannonSensitivity'), cannonSensitivityValue=$('#cannonSensitivityValue');
@@ -74,6 +75,36 @@
   function sensitivityLevel(){return clamp(Math.round(Number(settings.cannonSensitivity)||3),1,5);}
   function keyboardTurnSpeed(){return [0,26,42,58,78,100][sensitivityLevel()];}
   function joystickTurnSpeed(){return [0,45,75,120,200,360][sensitivityLevel()];}
+
+  function fullscreenElement(){return document.fullscreenElement||document.webkitFullscreenElement||null;}
+  function isFullscreen(){return !!fullscreenElement();}
+  async function enterFullscreen(){
+    const el=document.documentElement;
+    try{
+      if(el.requestFullscreen)await el.requestFullscreen();
+      else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+    }catch(_){ }
+  }
+  async function exitFullscreen(){
+    try{
+      if(document.exitFullscreen)await document.exitFullscreen();
+      else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
+    }catch(_){ }
+  }
+  function toggleFullscreen(){if(isFullscreen())exitFullscreen();else enterFullscreen();}
+  function updateFullscreenButtons(){
+    const active=isFullscreen();
+    for(const btn of [menuFullscreenBtn,gameFullscreenBtn]){
+      if(!btn)continue;
+      const icon=btn.querySelector('.fullscreen-icon');
+      const label=btn.querySelector('.fullscreen-label');
+      if(icon)icon.textContent=active?'⤡':'⤢';
+      if(label)label.textContent=active?'Esci full screen':'Full screen';
+      btn.setAttribute('aria-label',active?'Esci da schermo intero':'Attiva schermo intero');
+      btn.title=active?'Esci da full screen':'Full screen';
+      btn.classList.toggle('is-fullscreen',active);
+    }
+  }
 
   function populateLevels(){
     levelSelect.innerHTML='';
@@ -660,6 +691,11 @@
     if(audio)audio.setSfxEnabled(settings.sfx);
   }
 
+  if(menuFullscreenBtn)menuFullscreenBtn.addEventListener('click',()=>{if(audio)audio.playSfx('uiClick',.65);toggleFullscreen();});
+  if(gameFullscreenBtn)gameFullscreenBtn.addEventListener('click',()=>{if(audio)audio.playSfx('uiClick',.65);toggleFullscreen();});
+  document.addEventListener('fullscreenchange',updateFullscreenButtons);
+  document.addEventListener('webkitfullscreenchange',updateFullscreenButtons);
+
   levelSelect.addEventListener('change',updateLevelMeta);
   newGameBtn.addEventListener('click',()=>{if(audio)audio.playSfx('uiClick',.65);startNewGame(selectedLevel().id);pushHistory('game');});continueBtn.addEventListener('click',()=>{if(audio)audio.playSfx('uiClick',.65);continueGame();pushHistory('pause');});
   settingsBtn.addEventListener('click',()=>{if(audio)audio.playSfx('uiClick',.65);settingsOverlay.classList.remove('hidden');pushHistory('settings');});closeSettingsBtn.addEventListener('click',()=>{if(history.state&&history.state.bombarda==='settings')history.back();else settingsOverlay.classList.add('hidden');});
@@ -678,5 +714,5 @@
   const unlockAudio=()=>{if(audio){audio.unlock();if(!state&&settings.music)audio.playMenuMusic();}};
   window.addEventListener('pointerdown',unlockAudio,{once:true});window.addEventListener('keydown',unlockAudio,{once:true});
 
-  replaceHistory('menu');populateLevels();refreshStats();refreshContinue();syncAudioToggles();draw();if(audio&&settings.music)audio.playMenuMusic();
+  replaceHistory('menu');updateFullscreenButtons();populateLevels();refreshStats();refreshContinue();syncAudioToggles();draw();if(audio&&settings.music)audio.playMenuMusic();
 })();
